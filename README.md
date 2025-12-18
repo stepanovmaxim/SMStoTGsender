@@ -1,21 +1,9 @@
-Простое и надежное приложение для автоматической пересылки входящих SMS в Telegram. Позволяет читать банковские уведомления и коды подтверждения (2FA) с другого устройства. 
-Поддерживает фильтрацию по отправителю. Ваши данные (Токен и ID) хранятся только на телефоне.
-
-Инструкция по настройке:
-Создайте бота: Откройте Telegram, найдите @BotFather, отправьте команду /newbot и получите API Token.
-Узнайте свой ID: Найдите бота @getidsbot, нажмите Start и скопируйте Id.
-
-В приложении:
-Вставьте Токен и Chat ID в соответствующие поля.
-(Опционально) В поле "Фильтр" напишите имена отправителей через запятую (например: Sberbank, 900, Google). Оставьте пустым, чтобы получать все SMS.
-Нажмите Сохранить настройки.
-Проверка: Нажмите Отправить тестовое сообщение. Если оно пришло в Telegram — всё работает!
-
 A simple and reliable Android app to automatically forward incoming SMS messages to a Telegram bot. Perfect for receiving bank alerts and 2FA codes on another device. Supports sender filtering. All settings (Token & ID) are stored locally on your device for privacy.
 
 Setup Guide:
 Create a Bot: Open Telegram, find @BotFather, send /newbot and copy the API Token.
-Get your ID: Find @getidsbot, press Start, and copy your Id.
+Create new group and add your new bot.
+Get your ID: Find @getidsbot, add it to your group, press Start, and copy your Id, remove this bot after that.
 
 In the App:
 Paste the Token and Chat ID into the fields.
@@ -23,14 +11,17 @@ Paste the Token and Chat ID into the fields.
 Click Save Settings.
 Test: Click Send Test Message. If you receive it in Telegram, everything is ready!
 
-Una aplicación sencilla y fiable para reenviar automáticamente SMS entrantes a un bot de Telegram. Ideal para recibir alertas bancarias y códigos de verificación (2FA) en otro dispositivo. Soporta filtrado por remitente. Tus datos (Token e ID) se guardan localmente en tu teléfono.
+Простое и надежное приложение для автоматической пересылки входящих SMS в Telegram. Позволяет читать банковские уведомления и коды подтверждения (2FA) с другого устройства. 
+Поддерживает фильтрацию по отправителю. Ваши данные (Токен и ID) хранятся только на телефоне.
 
-Guía de Configuración:
-Crear un Bot: Abre Telegram, busca @BotFather, envía el comando /newbot y copia el API Token.
-Obtener tu ID: Busca el bot @getidsbot, pulsa Start y copia tu Id.
-En la Aplicación:
-Pega el Token y el Chat ID en los campos correspondientes.
-(Opcional) En el campo "Filtro", escribe los nombres de los remitentes separados por comas (ej: Banco, Santander, Google). Déjalo vacío para reenviar todo.
-Pulsa Guardar Configuración (Save Settings).
-Prueba: Pulsa Enviar Mensaje de Prueba (Send Test Message). Si lo recibes en Telegram, ¡todo funciona!
+Инструкция по настройке:
+Создайте бота: Откройте Telegram, найдите @BotFather, отправьте команду /newbot и получите API Token.
+Создайте группу в Telegram и добавьте туда своего нового бота.
+Узнайте свой ID группы: Найдите бота @getidsbot, нажмите Start и скопируйте Id, удалите этого бота из группы.
+
+В приложении:
+Вставьте Токен и Chat ID в соответствующие поля.
+(Опционально) В поле "Фильтр" напишите имена отправителей через запятую (например: Sberbank, 900, Google). Оставьте пустым, чтобы получать все SMS.
+Нажмите Сохранить настройки.
+Проверка: Нажмите Отправить тестовое сообщение. Если оно пришло в Telegram — всё работает!
 
