@@ -62,5 +62,13 @@
         android:text="@string/btn_test"
         android:backgroundTint="#4CAF50"
         android:layout_marginTop="10dp"/>
+    <Button
+        android:id="@+id/btnGithub"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/github_link"
+        android:backgroundTint="#24292e"
+        android:textColor="#FFFFFF" />
 
 </LinearLayout>

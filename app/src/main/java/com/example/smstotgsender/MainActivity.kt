@@ -78,6 +78,12 @@ class MainActivity : AppCompatActivity() {
             requestBatteryIgnore()  // 1. Просим Android не убивать процесс
             openAutoStartSettings() // 2. Пытаемся открыть автозапуск (для Xiaomi/Huawei)
         }
+        // Находим кнопку и вешаем слушатель
+        findViewById<Button>(R.id.btnGithub).setOnClickListener {
+            // Открываем браузер с ссылкой на репозиторий
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/stepanovmaxim/SMStoTGsender"))
+            startActivity(intent)
+        }
 
         // --- Проверки при запуске ---
         checkPermissions()
