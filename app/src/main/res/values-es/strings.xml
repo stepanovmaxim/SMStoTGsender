@@ -9,7 +9,9 @@
     <string name="hint_filter">Ej: Banco, Info, 900</string>
     <string name="btn_save">Guardar Configuración</string>
     <string name="btn_test">Enviar Mensaje de Prueba</string>
-
+    <string name="btn_battery">Permitir segundo plano</string>
+    <string name="msg_battery_ignored">¡Optimización ya desactivada!</string>
+    <string name="msg_battery_request">Desactive optimización de batería para estabilidad.</string>
     <string name="msg_fill_fields">¡Por favor complete Token e ID!</string>
     <string name="msg_saved">¡Configuración guardada!</string>
     <string name="msg_test_sent">¡Enviado a Telegram!</string>

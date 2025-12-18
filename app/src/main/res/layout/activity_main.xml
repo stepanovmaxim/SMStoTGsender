@@ -48,7 +48,13 @@
         android:layout_height="wrap_content"
         android:text="@string/btn_save"
         android:layout_marginTop="20dp"/>
-
+    <Button
+        android:id="@+id/btnBattery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_battery"
+        android:backgroundTint="#FF9800"
+        android:layout_marginTop="10dp"/>
     <Button
         android:id="@+id/btnTest"
         android:layout_width="match_parent"

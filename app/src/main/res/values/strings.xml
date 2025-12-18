@@ -9,7 +9,9 @@
     <string name="hint_filter">Ex: Bank, 900, Info</string>
     <string name="btn_save">Save Settings</string>
     <string name="btn_test">Send Test Message</string>
-
+    <string name="btn_battery">Enable Background Work</string>
+    <string name="msg_battery_ignored">Battery optimization already disabled!</string>
+    <string name="msg_battery_request">Please disable battery optimization for stability.</string>
     <string name="msg_fill_fields">Please fill Token and ID!</string>
     <string name="msg_saved">Settings saved!</string>
     <string name="msg_test_sent">Sent to Telegram!</string>

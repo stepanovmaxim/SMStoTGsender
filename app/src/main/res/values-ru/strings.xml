@@ -9,7 +9,9 @@
     <string name="hint_filter">Например: Sberbank, 900, Alfa</string>
     <string name="btn_save">Сохранить настройки</string>
     <string name="btn_test">Отправить тестовое сообщение</string>
-
+    <string name="btn_battery">Разрешить работу в фоне</string>
+    <string name="msg_battery_ignored">Ограничения уже сняты!</string>
+    <string name="msg_battery_request">Отключите экономию батареи для стабильности.</string>
     <string name="msg_fill_fields">Заполните Токен и ID!</string>
     <string name="msg_saved">Настройки сохранены!</string>
     <string name="msg_test_sent">Ушло в Telegram!</string>
