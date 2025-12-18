@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SMS to TG</string>
+
+    <string name="title_settings">Настройки Telegram Бота</string>
+    <string name="hint_token">Вставьте Bot Token</string>
+    <string name="hint_chat_id">Вставьте Chat ID</string>
+    <string name="label_filter">Фильтр (оставьте пустым для всего):</string>
+    <string name="hint_filter">Например: Sberbank, 900, Alfa</string>
+    <string name="btn_save">Сохранить настройки</string>
+    <string name="btn_test">Отправить тестовое сообщение</string>
+
+    <string name="msg_fill_fields">Заполните Токен и ID!</string>
+    <string name="msg_saved">Настройки сохранены!</string>
+    <string name="msg_test_sent">Ушло в Telegram!</string>
+    <string name="msg_test_error">Ошибка: %1$s</string>
+    <string name="msg_test_body">👋 Привет! Это тестовое сообщение.</string>
+    <string name="msg_sms_template">📩 *SMS от:* %1$s\n%2$s</string>
+</resources>

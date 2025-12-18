@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SMS to TG</string>
+
+    <string name="title_settings">Configuración del Bot</string>
+    <string name="hint_token">Insertar Token del Bot</string>
+    <string name="hint_chat_id">Insertar Chat ID</string>
+    <string name="label_filter">Filtro (dejar vacío para todo):</string>
+    <string name="hint_filter">Ej: Banco, Info, 900</string>
+    <string name="btn_save">Guardar Configuración</string>
+    <string name="btn_test">Enviar Mensaje de Prueba</string>
+
+    <string name="msg_fill_fields">¡Por favor complete Token e ID!</string>
+    <string name="msg_saved">¡Configuración guardada!</string>
+    <string name="msg_test_sent">¡Enviado a Telegram!</string>
+    <string name="msg_test_error">Error: %1$s</string>
+    <string name="msg_test_body">👋 ¡Hola! Este es un mensaje de prueba.</string>
+    <string name="msg_sms_template">📩 *SMS de:* %1$s\n%2$s</string>
+</resources>

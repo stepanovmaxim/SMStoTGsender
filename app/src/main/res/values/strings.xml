@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SMS to TG</string>
+
+    <string name="title_settings">Telegram Bot Settings</string>
+    <string name="hint_token">Insert Bot Token</string>
+    <string name="hint_chat_id">Insert Chat ID</string>
+    <string name="label_filter">Filter (leave empty for all):</string>
+    <string name="hint_filter">Ex: Bank, 900, Info</string>
+    <string name="btn_save">Save Settings</string>
+    <string name="btn_test">Send Test Message</string>
+
+    <string name="msg_fill_fields">Please fill Token and ID!</string>
+    <string name="msg_saved">Settings saved!</string>
+    <string name="msg_test_sent">Sent to Telegram!</string>
+    <string name="msg_test_error">Error: %1$s</string>
+    <string name="msg_test_body">👋 Hello! This is a test message.</string>
+    <string name="msg_sms_template">📩 *SMS from:* %1$s\n%2$s</string>
+</resources>
