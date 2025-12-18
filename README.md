@@ -12,9 +12,11 @@
 Важно: Чтобы Android не закрывал приложение в фоне, включите для него Автозапуск и режим Без ограничений в настройках батареи.
 
 A simple and reliable Android app to automatically forward incoming SMS messages to a Telegram bot. Perfect for receiving bank alerts and 2FA codes on another device. Supports sender filtering. All settings (Token & ID) are stored locally on your device for privacy.
+
 Setup Guide:
 Create a Bot: Open Telegram, find @BotFather, send /newbot and copy the API Token.
 Get your ID: Find @getidsbot, press Start, and copy your Id.
+
 In the App:
 Paste the Token and Chat ID into the fields.
 (Optional) In the "Filter" field, enter sender names separated by commas (e.g., Bank, PayPal, Amazon). Leave empty to forward all SMS.
