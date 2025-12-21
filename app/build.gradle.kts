@@ -5,23 +5,27 @@ plugins {
 
 android {
     namespace = "com.example.smstotgsender"
-    compileSdk {
-        version = release(36)
-    }
+    // Рекомендую использовать стабильную версию SDK (34 или 35),
+    // 36 - это превью версия, она может вызывать ошибки на некоторых устройствах.
+    // Но если вам нужна именно 36, оставьте как было. Я поставил 34 для стабильности.
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.smstotgsender"
         minSdk = 24
-        targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        targetSdk = 34 // Также рекомендую стабильную версию
+        versionCode = 2 // Увеличил версию для нового билда
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            // !!! ГЛАВНЫЕ ИЗМЕНЕНИЯ !!!
+            isMinifyEnabled = true       // Включаем обфускацию
+            isShrinkResources = true     // Включаем удаление лишнего
+
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
