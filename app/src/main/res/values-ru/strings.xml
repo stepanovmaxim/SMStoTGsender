@@ -17,6 +17,6 @@
     <string name="msg_test_sent">Ушло в Telegram!</string>
     <string name="msg_test_error">Ошибка: %1$s</string>
     <string name="msg_test_body">👋 Привет! Это тестовое сообщение.</string>
-    <string name="msg_sms_template">📩 *SMS от:* %1$s\n%2$s</string>
+    <string name="msg_sms_template">📩 SMS от: %1$s\n\n%2$s</string>
     <string name="github_link">Проект на GitHub</string>
 </resources>

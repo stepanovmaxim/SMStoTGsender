@@ -14,8 +14,8 @@ android {
         applicationId = "com.example.smstotgsender"
         minSdk = 24
         targetSdk = 34 // Также рекомендую стабильную версию
-        versionCode = 2 // Увеличил версию для нового билда
-        versionName = "1.1"
+        versionCode = 3 // Увеличил версию для нового билда
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -50,5 +50,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("com.squareup.okhttp3:okhttp:4.11.0")
 }

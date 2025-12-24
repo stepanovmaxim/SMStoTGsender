@@ -17,6 +17,6 @@
     <string name="msg_test_sent">Sent to Telegram!</string>
     <string name="msg_test_error">Error: %1$s</string>
     <string name="msg_test_body">👋 Hello! This is a test message.</string>
-    <string name="msg_sms_template">📩 *SMS from:* %1$s\n%2$s</string>
+    <string name="msg_sms_template">📩 SMS from: %1$s\n\n%2$s</string>
     <string name="github_link">Project on GitHub</string>
 </resources>

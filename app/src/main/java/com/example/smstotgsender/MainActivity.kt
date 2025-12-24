@@ -1,23 +1,22 @@
 package com.example.smstotgsender
 
 import android.Manifest
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.PowerManager
-import android.provider.Settings
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import okhttp3.*
-import java.io.IOException
+import java.io.OutputStreamWriter
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,173 +24,115 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // --- Инициализация элементов ---
         val etToken = findViewById<EditText>(R.id.etBotToken)
         val etChatId = findViewById<EditText>(R.id.etChatId)
         val etFilter = findViewById<EditText>(R.id.etFilter)
-
         val btnSave = findViewById<Button>(R.id.btnSave)
         val btnTest = findViewById<Button>(R.id.btnTest)
-        val btnBattery = findViewById<Button>(R.id.btnBattery) // Кнопка батареи
 
-        // --- Работа с настройками ---
+        // Кнопку батареи можно оставить в UI, но логику сделаем безопасной (просто открытие настроек)
+        // Или лучше вообще убрать агрессивные запросы
+        val btnBattery = findViewById<Button>(R.id.btnBattery)
+
         val sharedPrefs = getSharedPreferences("SmsPrefs", Context.MODE_PRIVATE)
-
-        // Загружаем сохраненные данные в поля
         etToken.setText(sharedPrefs.getString("BOT_TOKEN", ""))
         etChatId.setText(sharedPrefs.getString("CHAT_ID", ""))
         etFilter.setText(sharedPrefs.getString("FILTER_LIST", ""))
 
-        // --- Кнопка СОХРАНИТЬ ---
         btnSave.setOnClickListener {
-            val token = etToken.text.toString().trim()
-            val chatId = etChatId.text.toString().trim()
-            val filter = etFilter.text.toString().trim()
-
-            if (token.isEmpty() || chatId.isEmpty()) {
-                Toast.makeText(this, getString(R.string.msg_fill_fields), Toast.LENGTH_SHORT).show()
-            } else {
-                sharedPrefs.edit().apply {
-                    putString("BOT_TOKEN", token)
-                    putString("CHAT_ID", chatId)
-                    putString("FILTER_LIST", filter)
-                    apply()
-                }
-                Toast.makeText(this, getString(R.string.msg_saved), Toast.LENGTH_SHORT).show()
+            sharedPrefs.edit().apply {
+                putString("BOT_TOKEN", etToken.text.toString().trim())
+                putString("CHAT_ID", etChatId.text.toString().trim())
+                putString("FILTER_LIST", etFilter.text.toString().trim())
+                apply()
             }
+            Toast.makeText(this, getString(R.string.msg_saved), Toast.LENGTH_SHORT).show()
         }
 
-        // --- Кнопка ТЕСТ ---
         btnTest.setOnClickListener {
             val token = etToken.text.toString().trim()
             val chatId = etChatId.text.toString().trim()
-
             if (token.isNotEmpty() && chatId.isNotEmpty()) {
-                sendTestMessage(token, chatId)
+                sendTestMessageNative(token, chatId)
             } else {
                 Toast.makeText(this, getString(R.string.msg_fill_fields), Toast.LENGTH_SHORT).show()
             }
         }
 
-        // --- Кнопка БАТАРЕЯ (Фон/Автозапуск) ---
+        // Упрощенная логика батареи: просто открываем настройки приложений
         btnBattery.setOnClickListener {
-            requestBatteryIgnore()  // 1. Просим Android не убивать процесс
-            openAutoStartSettings() // 2. Пытаемся открыть автозапуск (для Xiaomi/Huawei)
-        }
-        // Находим кнопку и вешаем слушатель
-        findViewById<Button>(R.id.btnGithub).setOnClickListener {
-            // Открываем браузер с ссылкой на репозиторий
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/stepanovmaxim/SMStoTGsender"))
-            startActivity(intent)
+            try {
+                val intent = Intent(android.provider.Settings.ACTION_SETTINGS)
+                startActivity(intent)
+                Toast.makeText(this, "Please disable battery optimization manually", Toast.LENGTH_LONG).show()
+            } catch (e: Exception) { }
         }
 
-        // --- Проверки при запуске ---
+        findViewById<Button>(R.id.btnGithub).setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/stepanovmaxim/SMStoTGsender")))
+        }
+
         checkPermissions()
-        checkBatteryOptimization() // Напоминаем, если экономия включена
     }
 
-    // === ЛОГИКА ОТПРАВКИ ТЕСТА ===
-    private fun sendTestMessage(token: String, chatId: String) {
-        val client = OkHttpClient()
-        val url = "https://api.telegram.org/bot$token/sendMessage"
+    private fun checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECEIVE_SMS), 1)
+        }
+    }
 
-        // Берем текст из ресурсов (для перевода)
+    // === НЕТ OKHTTP, ЧИСТАЯ JAVA ===
+    private fun sendTestMessageNative(token: String, chatId: String) {
         val text = getString(R.string.msg_test_body)
-
-        val formBody = FormBody.Builder()
-            .add("chat_id", chatId)
-            .add("text", text)
-            .build()
-
-        val request = Request.Builder()
-            .url(url)
-            .post(formBody)
-            .build()
 
         Thread {
             try {
-                client.newCall(request).execute().use { response ->
-                    runOnUiThread {
-                        if (response.isSuccessful) {
-                            Toast.makeText(this, getString(R.string.msg_test_sent), Toast.LENGTH_LONG).show()
-                        } else {
-                            val errorMsg = "Code: ${response.code}"
-                            Toast.makeText(this, getString(R.string.msg_test_error, errorMsg), Toast.LENGTH_LONG).show()
-                        }
+                // Сборка URL
+                val urlString = "https://" + "api.telegram.org/bot$token/sendMessage"
+                val url = URL(urlString)
+                val conn = url.openConnection() as HttpURLConnection
+                conn.requestMethod = "POST"
+                conn.doOutput = true
+                conn.connectTimeout = 5000
+
+                // Параметры
+                val params = HashMap<String, String>()
+                params["chat_id"] = chatId
+                params["text"] = text
+
+                // Отправка
+                val os = conn.outputStream
+                val writer = OutputStreamWriter(os, StandardCharsets.UTF_8)
+                writer.write(getPostDataString(params))
+                writer.flush()
+                writer.close()
+                os.close()
+
+                val code = conn.responseCode
+                runOnUiThread {
+                    if (code == 200) {
+                        Toast.makeText(this, getString(R.string.msg_test_sent), Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(this, "Error code: $code", Toast.LENGTH_LONG).show()
                     }
                 }
-            } catch (e: IOException) {
+            } catch (e: Exception) {
                 runOnUiThread {
-                    Toast.makeText(this, getString(R.string.msg_test_error, e.message), Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Error: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
         }.start()
     }
 
-    // === ЛОГИКА РАЗРЕШЕНИЙ SMS ===
-    private fun checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)
-            != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECEIVE_SMS), 1)
+    private fun getPostDataString(params: HashMap<String, String>): String {
+        val result = StringBuilder()
+        var first = true
+        for ((key, value) in params) {
+            if (first) first = false else result.append("&")
+            result.append(URLEncoder.encode(key, "UTF-8"))
+            result.append("=")
+            result.append(URLEncoder.encode(value, "UTF-8"))
         }
-    }
-
-    // === ЛОГИКА БАТАРЕИ И АВТОЗАПУСКА ===
-
-    // Запрос на отключение Doze Mode (экономии батареи)
-    private fun requestBatteryIgnore() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
-            val packageName = packageName
-
-            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
-                val intent = Intent()
-                intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-                intent.data = Uri.parse("package:$packageName")
-                try {
-                    startActivity(intent)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            } else {
-                Toast.makeText(this, getString(R.string.msg_battery_ignored), Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    // Проверка статуса при запуске (показываем тост, если не настроено)
-    private fun checkBatteryOptimization() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
-            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
-                Toast.makeText(this, getString(R.string.msg_battery_request), Toast.LENGTH_LONG).show()
-            }
-        }
-    }
-
-    // Попытка открыть скрытые меню автозапуска для китайских оболочек
-    private fun openAutoStartSettings() {
-        val manufacturer = Build.MANUFACTURER.lowercase()
-        val intent = Intent()
-        try {
-            when {
-                "xiaomi" in manufacturer -> {
-                    intent.component = ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")
-                }
-                "oppo" in manufacturer -> {
-                    intent.component = ComponentName("com.coloros.safecenter", "com.coloros.safecenter.permission.startup.StartupAppListActivity")
-                }
-                "vivo" in manufacturer -> {
-                    intent.component = ComponentName("com.vivo.permissionmanager", "com.vivo.permissionmanager.activity.BgStartUpManagerActivity")
-                }
-                "huawei" in manufacturer || "honor" in manufacturer -> {
-                    intent.component = ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity")
-                }
-                else -> return // Для остальных брендов ничего не делаем
-            }
-            startActivity(intent)
-        } catch (e: Exception) {
-            e.printStackTrace() // Если меню не найдено, просто игнорируем
-        }
+        return result.toString()
     }
 }
